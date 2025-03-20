@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Carbon Credit Reports</h1>
+        <nav>
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/trade">Trade</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <h2>Credit Trends</h2>
+        <canvas id="creditChart"></canvas>
+    </section>
+
+    <script>
+        async function loadReports() {
+            let response = await fetch('/api/reports');
+            let data = await response.json();
+
+            new Chart(document.getElementById("creditChart"), {
+                type: "line",
+                data: {
+                    labels: data.dates,
+                    datasets: [{
+                        label: "Carbon Credits",
+                        data: data.credits,
+                        borderColor: "green",
+                        fill: false
+                    }]
+                }
+            });
+        }
+
+        loadReports();
+    </script>
+</body>
+</html>

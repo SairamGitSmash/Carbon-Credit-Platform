@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Carbon Credits</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Trade Carbon Credits</h1>
+        <nav>
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/reports">Reports</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="trade">
+        <h2>Initiate a Trade</h2>
+        <form id="trade-form">
+            <label for="to_org_id">Organization ID:</label>
+            <input type="number" id="to_org_id" name="to_org_id" required>
+
+            <label for="credits">Credits to Trade:</label>
+            <input type="number" id="credits" name="credits" required>
+
+            <button type="submit">Submit Trade</button>
+        </form>
+    </section>
+
+    <script>
+        document.getElementById("trade-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            let toOrgId = document.getElementById("to_org_id").value;
+            let credits = document.getElementById("credits").value;
+
+            let response = await fetch('/api/trade', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ to_org_id: toOrgId, credits: credits })
+            });
+
+            let data = await response.json();
+            alert(data.message);
+        });
+    </script>
+</body>
+</html>
